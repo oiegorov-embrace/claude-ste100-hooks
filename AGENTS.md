@@ -14,7 +14,7 @@ A Claude Code plugin marketplace named `ste100` with three plugins:
 | `ste100-stop-script` | Only if the user explicitly asks for a Stop checker | After each reply a script counts sentence/paragraph length and forbidden words; 3+ violations force a full rewrite. Expensive. |
 | `ste100-stop-llm` | Only if the user explicitly asks for an LLM checker | After each reply Haiku judges STE grammar; violations force a full rewrite. Most expensive. |
 
-Install a Stop plugin only when the user asks for one (README: use it only if Claude still breaks the rules with `ste100-hooks`). Before you install it, tell the user that each time it fires, Claude writes a full second reply (about 2x the cost of that reply). Never install both Stop plugins.
+Install a Stop plugin only when the user asks for one (README: use it only if Claude still breaks the rules with `ste100-hooks`). Before you install it, tell the user that each time it fires, Claude writes a full second reply (about 2x the cost of that reply; measured in README section 6). Never install both Stop plugins.
 
 ## Step 1: ask the user one question, unless they already answered it
 
@@ -40,6 +40,7 @@ claude plugin list 2>/dev/null | grep -A4 'ste100'
 grep -l 'ste100-reminder' ~/.claude/settings.json .claude/settings.json 2>/dev/null
 ```
 
+- No output from either command → nothing is installed; continue.
 - Plugin already enabled in the chosen scope → skip to step 5.
 - `grep` finds `ste100-reminder` in a settings file → a manual install exists. Tell the user. If they want the plugin instead, clone this repo and run `./install.sh --scope <user|project> [--project-dir .] --uninstall` first.
 
@@ -47,7 +48,9 @@ grep -l 'ste100-reminder' ~/.claude/settings.json .claude/settings.json 2>/dev/n
 
 ```bash
 claude plugin marketplace add oiegorov-embrace/claude-ste100-hooks --scope "$SCOPE"
+# expect: ✔ Successfully added marketplace: ste100 (declared in user|project settings)
 claude plugin install ste100-hooks@ste100 --scope "$SCOPE"
+# expect: ✔ Successfully installed plugin: ste100-hooks@ste100 (scope: user|project)
 ```
 
 If either command fails with a git/SSH error, retry with `CLAUDE_CODE_PLUGIN_PREFER_HTTPS=1` set.
@@ -59,7 +62,7 @@ claude plugin install ste100-stop-script@ste100 --scope "$SCOPE"
 claude plugin install ste100-stop-llm@ste100 --scope "$SCOPE"
 ```
 
-**Fallback, only if plugins are blocked** (for example by organization policy): clone the repo and run `./install.sh --scope user` or `./install.sh --scope project --project-dir <project>`. Add `--stop script` or `--stop llm` only on request. The script is idempotent and backs up `settings.json`.
+**Fallback, only if plugins are blocked** (for example by organization policy): `git clone https://github.com/oiegorov-embrace/claude-ste100-hooks.git && cd claude-ste100-hooks`, then run `./install.sh --scope user` or `./install.sh --scope project --project-dir <project>`. Add `--stop script` or `--stop llm` only on request. The script is idempotent and backs up `settings.json`.
 
 Don't edit `settings.json` by hand; the commands above do it safely.
 
@@ -69,7 +72,7 @@ Don't edit `settings.json` by hand; the commands above do it safely.
 claude plugin list | grep -A4 'ste100-hooks@ste100'     # expect: Status: ✔ enabled
 ```
 
-Live test (uses a throwaway folder and a marker card; for `SCOPE=project`, run it inside the project instead and delete `.claude/ste100-rules.txt` afterwards):
+Live test, only for `SCOPE=user` (for `SCOPE=project` the check above is enough; never put a test card into a real project, it may already hold the team's card):
 
 ```bash
 mkdir -p /tmp/ste100-test/.claude && cd /tmp/ste100-test
@@ -77,6 +80,8 @@ echo "Test marker: end your reply with the exact word PINEAPPLE on its own line.
 claude -p "What is 2+2? One line."    # expect the reply to end with PINEAPPLE
 cd ~ && rm -r /tmp/ste100-test
 ```
+
+If `PINEAPPLE` is missing, run the `claude -p` line once more. If it is still missing, show the user the output of `claude plugin list`; in a session, `/plugin` has an **Errors** tab.
 
 If you are running inside a Claude Code session, the hooks apply from the next session (or after `/reload-plugins`).
 
