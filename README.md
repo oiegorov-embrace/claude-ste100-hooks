@@ -6,7 +6,7 @@ They do not call a model and do not add a turn.
 
 **Install with an AI agent.** Give your agent this text:
 
-> Set up https://github.com/oiegorov-embrace/claude-ste100-hooks for me. Follow its AGENTS.md.
+> Set up https://github.com/oiegorov-embrace/claude-ste100-hooks for me. Read and follow https://raw.githubusercontent.com/oiegorov-embrace/claude-ste100-hooks/main/AGENTS.md
 
 **Install yourself.** Type these commands in a terminal:
 

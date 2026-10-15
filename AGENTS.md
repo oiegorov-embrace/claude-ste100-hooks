@@ -2,6 +2,7 @@
 
 You are an AI agent. The user pointed you at this repository so that you set it up for them.
 Follow these steps in order. README.md has the background; you don't need it to install.
+If you fetch this file, fetch the raw file (https://raw.githubusercontent.com/oiegorov-embrace/claude-ste100-hooks/main/AGENTS.md), not the GitHub page, so you get every command verbatim.
 
 ## What this installs
 
@@ -13,7 +14,7 @@ A Claude Code plugin marketplace named `ste100` with three plugins:
 | `ste100-stop-script` | Only if the user explicitly asks for a Stop checker | After each reply a script counts sentence/paragraph length and forbidden words; 3+ violations force a full rewrite. Expensive. |
 | `ste100-stop-llm` | Only if the user explicitly asks for an LLM checker | After each reply Haiku judges STE grammar; violations force a full rewrite. Most expensive. |
 
-Never install both Stop plugins. Never install a Stop plugin on your own initiative.
+Install a Stop plugin only when the user asks for one (README: use it only if Claude still breaks the rules with `ste100-hooks`). Before you install it, tell the user that each time it fires, Claude writes a full second reply (about 2x the cost of that reply). Never install both Stop plugins.
 
 ## Step 1: ask the user one question, unless they already answered it
 
