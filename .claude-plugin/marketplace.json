@@ -1,0 +1,24 @@
+{
+  "name": "ste100",
+  "owner": {
+    "name": "oiegorov-embrace"
+  },
+  "description": "Hooks that keep Claude Code replies in ASD-STE100 Simplified Technical English",
+  "plugins": [
+    {
+      "name": "ste100-hooks",
+      "source": "./plugins/ste100-hooks",
+      "description": "Recommended. STE rule card on each message and after compaction. No model call, no extra turn."
+    },
+    {
+      "name": "ste100-stop-script",
+      "source": "./plugins/ste100-stop-script",
+      "description": "Optional, expensive. Script check after each reply; forces a full rewrite on 3+ violations."
+    },
+    {
+      "name": "ste100-stop-llm",
+      "source": "./plugins/ste100-stop-llm",
+      "description": "Optional, most expensive. Haiku check after each reply; forces a full rewrite on clear violations."
+    }
+  ]
+}

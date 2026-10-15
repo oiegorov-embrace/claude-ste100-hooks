@@ -1,0 +1,14 @@
+{
+  "name": "ste100-stop-llm",
+  "description": "Optional and most expensive: after each reply, Haiku judges STE100 grammar; clear violations make Claude rewrite the reply.",
+  "author": {
+    "name": "oiegorov-embrace"
+  },
+  "repository": "https://github.com/oiegorov-embrace/claude-ste100-hooks",
+  "keywords": [
+    "ste100",
+    "simplified-technical-english",
+    "hooks",
+    "writing-style"
+  ]
+}

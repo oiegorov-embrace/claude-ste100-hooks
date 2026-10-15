@@ -4,7 +4,9 @@
 Checks, with no model call:
 - sentence length (STE100_MAX_WORDS, default 25),
 - paragraph length (STE100_MAX_SENTENCES, default 6),
-- words from ste100-forbidden-words.txt (next to this script).
+- words from ste100-forbidden-words.txt. Lookup, first match wins:
+  $CLAUDE_PROJECT_DIR/.claude/ste100-forbidden-words.txt, ~/.claude/ste100-forbidden-words.txt,
+  then the file next to this script.
 Code blocks, inline code, URLs and table rows are skipped.
 
 If the reply has STE100_MIN_VIOLATIONS (default 3) or more violations, the hook blocks the stop
@@ -89,8 +91,14 @@ def main():
     if data.get("stop_hook_active"):
         return
     text = data.get("last_assistant_message") or ""
-    here = os.path.dirname(os.path.abspath(__file__))
-    found = check(text, load_forbidden(os.path.join(here, "ste100-forbidden-words.txt")))
+    name = "ste100-forbidden-words.txt"
+    candidates = [
+        os.path.join(os.environ.get("CLAUDE_PROJECT_DIR", ""), ".claude", name),
+        os.path.join(os.path.expanduser("~"), ".claude", name),
+        os.path.join(os.path.dirname(os.path.abspath(__file__)), name),
+    ]
+    path = next((c for c in candidates if os.path.isfile(c)), candidates[-1])
+    found = check(text, load_forbidden(path))
     if len(found) < MIN_VIOLATIONS:
         return
     listed = "\n".join(f"- {v}" for v in found[:MAX_LISTED])

@@ -1,0 +1,14 @@
+{
+  "name": "ste100-hooks",
+  "description": "Keeps replies in ASD-STE100 Simplified Technical English: adds an STE rule card to each user message and after each compaction. No model call, no extra turn.",
+  "author": {
+    "name": "oiegorov-embrace"
+  },
+  "repository": "https://github.com/oiegorov-embrace/claude-ste100-hooks",
+  "keywords": [
+    "ste100",
+    "simplified-technical-english",
+    "hooks",
+    "writing-style"
+  ]
+}

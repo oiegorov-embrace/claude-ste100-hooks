@@ -1,0 +1,11 @@
+{
+  "hooks": {
+    "UserPromptSubmit": [
+      { "hooks": [ { "type": "command", "command": "\"${CLAUDE_PLUGIN_ROOT}\"/scripts/ste100-reminder.sh" } ] }
+    ],
+    "SessionStart": [
+      { "matcher": "compact",
+        "hooks": [ { "type": "command", "command": "\"${CLAUDE_PLUGIN_ROOT}\"/scripts/ste100-reminder.sh" } ] }
+    ]
+  }
+}
