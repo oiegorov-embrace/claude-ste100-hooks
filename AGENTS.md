@@ -42,7 +42,7 @@ grep -l 'ste100-reminder' ~/.claude/settings.json .claude/settings.json 2>/dev/n
 
 - No output from either command → nothing is installed; continue.
 - Plugin already enabled in the chosen scope → skip to step 5.
-- `grep` finds `ste100-reminder` in a settings file → a manual install exists. Tell the user. If they want the plugin instead, clone this repo and run `./install.sh --scope <user|project> [--project-dir .] --uninstall` first.
+- `grep` finds `ste100-reminder` in a settings file → a manual install exists. Tell the user. The plugin's scripts detect it and stay quiet (no doubled card), but keep only one: if they want the plugin, clone this repo and run `./install.sh --scope <user|project> [--project-dir .] --uninstall` first.
 
 ## Step 4: install
 
@@ -65,7 +65,7 @@ claude plugin install ste100-stop-llm@ste100 --scope "$SCOPE"
 
 **Fallback, only if plugins are blocked** (for example by organization policy): `git clone https://github.com/oiegorov-embrace/claude-ste100-hooks.git && cd claude-ste100-hooks`, then run `./install.sh --scope user` or `./install.sh --scope project --project-dir <project>`. Add `--stop script` or `--stop llm` only on request. The script is idempotent and backs up `settings.json`. It changes only the `hooks` key, appends its hooks after the user's own, writes through symlinks, and `--uninstall` removes only its own entries. `tests/merge-safety.sh` proves this on a throwaway home; run it first if the user wants proof.
 
-Don't edit `settings.json` by hand; the commands above do it safely.
+Don't edit `settings.json` by hand; the commands above do it safely. The plugin itself never edits settings or `CLAUDE.md`; Claude Code adds one `extraKnownMarketplaces` and one `enabledPlugins` entry. For `SCOPE=user` the one-line form also works: `claude plugin install ste100-hooks --marketplace oiegorov-embrace/claude-ste100-hooks` (it registers the marketplace in user settings, so don't use it for `SCOPE=project`).
 
 ## Step 5: verify
 

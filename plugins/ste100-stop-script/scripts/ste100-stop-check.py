@@ -86,9 +86,26 @@ def check(text, forbidden):
     return found
 
 
+def manual_install_registered():
+    """Plugin copy only: True when install.sh registered the same Stop hook in a settings file."""
+    root = os.environ.get("CLAUDE_PLUGIN_ROOT")
+    if not root or not os.path.abspath(__file__).startswith(os.path.abspath(root)):
+        return False
+    project = os.environ.get("CLAUDE_PROJECT_DIR", ".")
+    for f in (os.path.expanduser("~/.claude/settings.json"),
+              os.path.join(project, ".claude", "settings.json"),
+              os.path.join(project, ".claude", "settings.local.json")):
+        try:
+            if "ste100-stop-check.py" in open(f, encoding="utf-8").read():
+                return True
+        except OSError:
+            pass
+    return False
+
+
 def main():
     data = json.load(sys.stdin)
-    if data.get("stop_hook_active"):
+    if data.get("stop_hook_active") or manual_install_registered():
         return
     text = data.get("last_assistant_message") or ""
     name = "ste100-forbidden-words.txt"

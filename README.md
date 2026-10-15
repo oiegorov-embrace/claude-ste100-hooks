@@ -8,15 +8,14 @@ They do not call a model and do not add a turn.
 
 > Set up https://github.com/oiegorov-embrace/claude-ste100-hooks for me. Read and follow https://raw.githubusercontent.com/oiegorov-embrace/claude-ste100-hooks/main/AGENTS.md
 
-**Install yourself.** Type these commands in a terminal:
+**Install yourself.** Type this command in a terminal. Then start a new session.
 
 ```bash
-claude plugin marketplace add oiegorov-embrace/claude-ste100-hooks
-claude plugin install ste100-hooks@ste100 --scope user
+claude plugin install ste100-hooks --marketplace oiegorov-embrace/claude-ste100-hooks
 ```
 
-Use `--scope project` in a project folder to share the hooks with your team.
-Start a new session after the installation.
+To share the hooks with your team, use the two commands in section 7.3 with `--scope project`.
+The plugin does not edit your hooks or your `CLAUDE.md`. Claude Code adds only the marketplace entry and the plugin entry to `settings.json`.
 
 | Plugin | What it does | Cost |
 | --- | --- | --- |
@@ -401,7 +400,8 @@ claude plugin uninstall ste100-hooks@ste100 --scope user
 | --- | --- | --- |
 | Claude writes normal English from the first message | The plugin is not enabled | Do test 8.1. In a session, type `/plugin` and examine the **Errors** tab. |
 | `jq: error: --rawfile` | `jq` is older than 1.6 | Install a newer `jq`. |
-| The rule card comes two times | The plugin and `install.sh` are both installed | Remove one of them (section 9.3). |
+| Claude says nothing about STE, but the plugin is enabled | `install.sh` hooks are also registered. The plugin then stays quiet, so the rule card does not come two times. | This is correct. To use only the plugin, type `./install.sh --scope <scope> --uninstall`. |
+| The Stop check comes two times | `ste100-stop-llm` and a manual Stop checker are both installed. Only the script variant finds a manual installation. | Remove one of them (section 9.3). |
 | The hooks do not operate for a team member | The person does not trust the project folder, or has old project files | Pull the project. Start Claude Code in the project folder and trust the folder. |
 | `SymlinkWriteRefusedError` | Your `settings.json` is a symlink. Claude Code does not write through a symlink. | Use `install.sh` (section 7.4). It writes through the symlink. |
 | `marketplace add` or `/plugin install` fails with a git error | The computer has no GitHub SSH key | Set `CLAUDE_CODE_PLUGIN_PREFER_HTTPS=1`, then try again. |
