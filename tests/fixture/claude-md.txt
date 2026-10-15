@@ -1,0 +1,6 @@
+# My personal rules
+
+Always answer in English.
+
+## Testing
+Run tests first.

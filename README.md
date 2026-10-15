@@ -87,6 +87,7 @@ claude-ste100-hooks/
 ├── README.md                              This instruction
 ├── AGENTS.md                              Installation procedure for AI agents
 ├── install.sh                             Manual installer, if you cannot use plugins (section 7.4)
+├── tests/merge-safety.sh                  Proof that install.sh merges and does not overwrite (section 7.4)
 ├── .claude-plugin/
 │   └── marketplace.json                   The list of the three plugins (section 4.1)
 └── plugins/
@@ -299,7 +300,16 @@ cd claude-ste100-hooks
 ./install.sh --scope project --project-dir <project>
 ```
 
-**NOTE:** The installer makes a backup of `settings.json`. It keeps your other hooks. You can run it again. It does not make duplicate hooks. Type `./install.sh --help` for all options.
+**NOTE:** The installer does not replace your settings. It merges into them:
+
+- It changes only the `hooks` key. All other settings stay the same.
+- It adds its hooks after your hooks. It does not change or remove your hooks.
+- It makes a backup of `settings.json` before each change.
+- It writes through a symlink. A `settings.json` that links to a dotfiles folder stays a link.
+- You can run it again. It does not make duplicate hooks.
+- `--uninstall` removes only its own hooks.
+
+To see the proof, type `tests/merge-safety.sh`. The test uses a temporary home folder. Type `./install.sh --help` for all options.
 
 ---
 
@@ -393,6 +403,7 @@ claude plugin uninstall ste100-hooks@ste100 --scope user
 | `jq: error: --rawfile` | `jq` is older than 1.6 | Install a newer `jq`. |
 | The rule card comes two times | The plugin and `install.sh` are both installed | Remove one of them (section 9.3). |
 | The hooks do not operate for a team member | The person does not trust the project folder, or has old project files | Pull the project. Start Claude Code in the project folder and trust the folder. |
+| `SymlinkWriteRefusedError` | Your `settings.json` is a symlink. Claude Code does not write through a symlink. | Use `install.sh` (section 7.4). It writes through the symlink. |
 | `marketplace add` or `/plugin install` fails with a git error | The computer has no GitHub SSH key | Set `CLAUDE_CODE_PLUGIN_PREFER_HTTPS=1`, then try again. |
 | Each reply comes two times | The Stop checker blocks too often | Set `STE100_MIN_VIOLATIONS` to a higher value, or remove the Stop checker. |
 | The second reply also breaks the rules | The Stop checker lets Claude stop after one rewrite. This prevents a loop. | Make the rule card more clear. The Stop checker does not try again. |

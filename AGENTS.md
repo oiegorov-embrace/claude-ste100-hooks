@@ -54,6 +54,7 @@ claude plugin install ste100-hooks@ste100 --scope "$SCOPE"
 ```
 
 If either command fails with a git/SSH error, retry with `CLAUDE_CODE_PLUGIN_PREFER_HTTPS=1` set.
+If it fails with `SymlinkWriteRefusedError`, the settings file is a symlink (dotfiles); Claude Code changed nothing. Use the fallback below, which writes through symlinks.
 
 Only if the user asked for a Stop checker, also run one of:
 
@@ -62,7 +63,7 @@ claude plugin install ste100-stop-script@ste100 --scope "$SCOPE"
 claude plugin install ste100-stop-llm@ste100 --scope "$SCOPE"
 ```
 
-**Fallback, only if plugins are blocked** (for example by organization policy): `git clone https://github.com/oiegorov-embrace/claude-ste100-hooks.git && cd claude-ste100-hooks`, then run `./install.sh --scope user` or `./install.sh --scope project --project-dir <project>`. Add `--stop script` or `--stop llm` only on request. The script is idempotent and backs up `settings.json`.
+**Fallback, only if plugins are blocked** (for example by organization policy): `git clone https://github.com/oiegorov-embrace/claude-ste100-hooks.git && cd claude-ste100-hooks`, then run `./install.sh --scope user` or `./install.sh --scope project --project-dir <project>`. Add `--stop script` or `--stop llm` only on request. The script is idempotent and backs up `settings.json`. It changes only the `hooks` key, appends its hooks after the user's own, writes through symlinks, and `--uninstall` removes only its own entries. `tests/merge-safety.sh` proves this on a throwaway home; run it first if the user wants proof.
 
 Don't edit `settings.json` by hand; the commands above do it safely.
 

@@ -43,16 +43,18 @@ cp "$SETTINGS" "$SETTINGS.bak-ste100-$(date +%Y%m%d-%H%M%S)"
 # Write settings.json through a temp file; stop with an error if jq fails or the result is invalid.
 apply() {
   if jq "$@" "$SETTINGS" > "$SETTINGS.tmp" && jq empty "$SETTINGS.tmp"; then
-    mv "$SETTINGS.tmp" "$SETTINGS"
+    cat "$SETTINGS.tmp" > "$SETTINGS"; rm -f "$SETTINGS.tmp"   # write in place: keeps a symlink, mode and owner
   else
     rm -f "$SETTINGS.tmp"; echo "Could not update $SETTINGS; it is unchanged." >&2; exit 1
   fi
 }
 
-# Remove every hook entry this installer owns (its commands contain "ste100-"), and empty leftovers.
-strip='def own: (.command // "") | test("ste100-");
+# Remove only the hook entries this installer adds (its two scripts and its own Stop prompt),
+# then drop groups and events that became empty. Every other hook stays as it is.
+strip='def own: ((.command // "") | test("/ste100-(reminder\\.sh|stop-check\\.py)\"?$"))
+           or ((.prompt // "") | startswith("You check if a reply follows ASD-STE100"));
   .hooks = ((.hooks // {})
-    | with_entries(.value |= (map(.hooks |= map(select((own | not) and ((.prompt // "") | test("ASD-STE100") | not))))
+    | with_entries(.value |= (map(.hooks |= map(select(own | not)))
                               | map(select(.hooks | length > 0))))
     | with_entries(select(.value | length > 0)))
   | if .hooks == {} then del(.hooks) else . end'

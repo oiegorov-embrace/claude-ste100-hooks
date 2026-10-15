@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-settings.json",
+  "model": "claude-opus-5-5",
+  "env": { "SKILL_REVIEW_MODEL": "claude-sonnet-5-5", "UNICODE": "Grüße ✓" },
+  "permissions": { "allow": ["Bash(npm test:*)", "Read(~/docs/**)"], "deny": ["Read(./.env)"], "defaultMode": "acceptEdits" },
+  "statusLine": { "type": "command", "command": "~/.claude/statusline.sh" },
+  "enabledPlugins": { "foo@bar": true },
+  "cleanupPeriodDays": 30,
+  "ratio": 1.50,
+  "hooks": {
+    "UserPromptSubmit": [
+      { "hooks": [ { "type": "command", "command": "~/my/prompt-hook.sh", "timeout": 5 } ] }
+    ],
+    "SessionStart": [
+      { "matcher": "compact", "hooks": [ { "type": "command", "command": "~/my/after-compact.sh" } ] },
+      { "matcher": "startup", "hooks": [ { "type": "command", "command": "~/my/startup.sh" } ] }
+    ],
+    "Stop": [
+      { "hooks": [
+          { "type": "command", "command": "~/my/notify.sh" },
+          { "type": "prompt", "prompt": "Team rule: check the reply follows ASD-STE100 and our glossary." }
+      ] }
+    ],
+    "PreToolUse": [
+      { "matcher": "Bash", "hooks": [ { "type": "command", "command": "~/my/guard.sh" } ] }
+    ]
+  }
+}
