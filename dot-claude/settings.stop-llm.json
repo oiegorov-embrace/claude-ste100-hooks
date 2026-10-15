@@ -1,0 +1,16 @@
+{
+  "hooks": {
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "prompt",
+            "model": "claude-haiku-5-5",
+            "timeout": 30,
+            "prompt": "You check if a reply follows ASD-STE100 Simplified Technical English. Hook input: $ARGUMENTS\n\nIf stop_hook_active is true, respond {\"ok\": true}.\nOtherwise examine only the prose in last_assistant_message. Ignore code blocks, inline code, commands, file paths, identifiers, tables and quotes.\nRules: max 20 words per sentence in instructions and 25 in descriptions; max 6 sentences per paragraph; active voice; simple tenses; instructions start with the verb; no -ing verb forms; no phrasal verbs; no idioms; no noun clusters longer than 3 words; one term per concept.\nSmall or doubtful deviations are OK. Respond {\"ok\": true} unless there are 3 or more clear violations.\nIf there are, respond {\"ok\": false, \"reason\": \"Your last reply does not follow ASD-STE100. Write it again in STE100. Keep the same content, code and commands. Violations: <list at most 5, each with the words that break the rule>\"}."
+          }
+        ]
+      }
+    ]
+  }
+}

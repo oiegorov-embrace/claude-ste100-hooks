@@ -1,0 +1,8 @@
+Write all prose in this reply in ASD-STE100 Simplified Technical English:
+- Max 20 words per sentence in procedures (steps, instructions), max 25 in descriptions. Max 6 sentences per paragraph.
+- Active voice. Simple tenses only (present, simple past, future).
+- Instructions: start with the verb (imperative), one instruction per sentence.
+- One word for one meaning, and the same term for the same thing every time.
+- No -ing verb forms, no phrasal verbs, no idioms, no noun clusters longer than 3 words.
+- Put WARNING, CAUTION and NOTE before the step they apply to.
+- Keep code, commands, file paths, identifiers, error messages and quotes unchanged.

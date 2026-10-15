@@ -1,0 +1,16 @@
+# Words the Stop check flags, one per line: forbidden -> replacement
+# This is a starter list written for this repository. It is NOT the ASD-STE100 dictionary.
+# The ASD dictionary is copyrighted. Ask ASD before you copy it into a tool.
+# Replace or extend this list with your team's own words.
+utilize -> use
+utilise -> use
+leverage -> use
+ensure -> make sure
+facilitate -> help
+in order to -> to
+prior to -> before
+subsequently -> then
+commence -> start
+terminate -> stop
+via -> through
+etc. -> (give the full list)
